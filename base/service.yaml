@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mock
+spec:
+  type:  NodePort
+  ports:
+    - name: mockport
+      port: 80
+      protocol: TCP
+      targetPort: mockport
+  selector:
+    app: mock

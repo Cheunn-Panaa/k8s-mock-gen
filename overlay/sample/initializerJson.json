@@ -1,0 +1,18 @@
+[
+  {
+    "httpRequest": {
+      "path": "/sample/v1/user",
+      "method": "GET"
+    },
+    "httpResponse": {
+      "body": [{"id":1,"name":"panaa", "email":  "cnourry@protonmail.com"}],
+      "statusCode": 200,
+      "headers": [
+        {
+          "name" : "Content-type",
+          "values" : [ "application/json; charset=utf-8" ]
+        }
+      ]
+    }
+  }
+]

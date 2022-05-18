@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mock
+  template:
+    metadata:
+      name: mock
+    spec:
+      containers:
+        - name: mock-container
+          image: mockserver/mockserver:mockserver-5.13.2
+          imagePullPolicy: Always
+          ports:
+            - name: mockport
+              containerPort: 1080
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: mockport
+            initialDelaySeconds: 2
+            periodSeconds: 2
+            successThreshold: 1
+            failureThreshold: 10
+          livenessProbe:
+            tcpSocket:
+              port: mockport
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 10
+          env:
+            - name: LOG_LEVEL
+              value: INFO
+            - name: SERVER_PORT
+              value: "1080"
+            - name: MOCKSERVER_PROPERTY_FILE
+              value: /config/mockserver.properties
+            - name: MOCKSERVER_INITIALIZATION_JSON_PATH
+              value: /config/initializerJson.json
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+          resources:
+            limits:
+              cpu: 750m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 250Mi
+      volumes:
+        - name: config-volume
+          configMap:
+            name: mockerserver-config
+            optional: true
